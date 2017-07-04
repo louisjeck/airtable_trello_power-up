@@ -1,0 +1,27 @@
+{
+  "name": "AirTable",
+  "details":"The [AirTable](https://airtable.com) Power-Up allows you to display custom fields from AirTable on Trello Cards",
+  "icon": {
+    "url": "https://seeklogo.com/images/A/airtable-logo-216B9AF035-seeklogo.com.png"
+  },
+  "author": "Trello Inc",
+  "capabilities": [
+    "authorization-status",
+    "attachment-sections",
+    "attachment-thumbnail",
+    "board-buttons",
+    "callback",
+    "card-badges",
+    "card-buttons",
+    "card-detail-badges",
+    "card-from-url",
+    "format-url",
+    "show-authorization",
+    "show-settings"
+  ],
+  "connectors": {
+    "iframe": {
+      "url": "./index.html"
+    }
+  }
+}
