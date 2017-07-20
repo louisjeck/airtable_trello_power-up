@@ -86,11 +86,9 @@ function generateBadgeList(t){
               dynamic: function toto (t) //dynamic : Trello refreshes every 10sec or on focus
               {
                 
-                return new Promise(function(resolve){ //Badge data promise
-                  
-                  fetchAirtableData(credentials, t).then(function(){ //If global data promise is resolved 
+                return fetchAirtableData(credentials, t).then(function(){ //If global data promise is resolved 
 
-                    resolve({
+                    return ({
                       title: badgeTitle, // for detail badges only
                       text: (typeof(data[cardID]) !== 'undefined') ? data[cardID][badgeTitle] : "",
                       color: null,
@@ -98,7 +96,7 @@ function generateBadgeList(t){
                       })
 
                   }); 
-                });
+           
               }
 
           }) 
