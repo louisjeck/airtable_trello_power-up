@@ -49,7 +49,7 @@ app.all('/webhooks', function(req, res) {
 app.engine('.html', require('ejs').renderFile);
 app.get("/auth", function(req, res){
     
-    res.render("auth.html", { AIRTABLE_API_KEY: req.query.airtable_api_key, AIRTABLE_BASE: req.query.airtable_base, AIRTABLE_TABLE: req.query.airtable_table, TRELLO_MODEL: req.query.trello_model });
+    res.render("auth.html", { AIRTABLE_API_KEY: req.query.airtable_api_key, AIRTABLE_BASE: req.query.airtable_base, TRELLO_MODEL: req.query.trello_model });
 });
 
 

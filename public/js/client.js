@@ -21,7 +21,7 @@ function fetchAirtableData(credentials){
     
     if(Date.now() - lastRefresh > CACHE_TIME) { //if more than 2 seconds, refresh cache
       lastRefresh = Date.now();
-      fetch(airtableAPI + credentials.app + "/" + credentials.table, { 
+      fetch(airtableAPI + credentials.app + "/Cards" , { 
       method: 'get', 
       headers: {
         'Authorization': 'Bearer ' + credentials.apiKey, 

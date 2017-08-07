@@ -69,10 +69,8 @@ t.board('id').get('id').then(function(model){
        
       credentialsDiv.innerHTML += ("<b>API Key :</b> " + credentials.apiKey);
       credentialsDiv.innerHTML += ("<br><b>Base :</b> " + credentials.app);
-      credentialsDiv.innerHTML += ("<br><b>Table :</b> " + credentials.table);
-      
-      
-      
+            
+    
     })
 })
 

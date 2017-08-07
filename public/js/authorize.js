@@ -6,7 +6,6 @@ var t = TrelloPowerUp.iframe();
 
 var apiKeyInput = document.getElementById('apiKey');
 var appInput = document.getElementById('app');
-var tableInput = document.getElementById('table');
 var statusTextSpan = document.getElementById('statusText');
 var authNode = document.getElementById('authNode');
 var authDiv = document.getElementById('auth');
@@ -50,7 +49,7 @@ document.getElementById('save').addEventListener('click', function(){
   
     var airtableAPI = 'https://api.airtable.com/v0/'
 
-    return fetch(airtableAPI+appInput.value+"/"+tableInput.value, { 
+    return fetch(airtableAPI+appInput.value+"/Cards", { 
     method: 'get', 
     headers: {
       'Authorization': 'Bearer '+apiKeyInput.value, 
@@ -63,7 +62,6 @@ document.getElementById('save').addEventListener('click', function(){
     }).then(function(response){
       appInput.className="" //reset error classes (use div instead ?)
       apiKeyInput.className="";
-      tableInput.className="";
       statusTextSpan.innerHTML="" //reset error message
 
 
@@ -71,14 +69,13 @@ document.getElementById('save').addEventListener('click', function(){
         case 404: //Not found
           statusTextSpan.innerHTML="Table not found";
           appInput.className="is-error";
-          tableInput.className="is-error";
           break;
         case 401: //Not authorized
           statusTextSpan.innerHTML="Authorization failed. Check your API Key";
           apiKeyInput.className="is-error";
           break;
         case 200: //OK
-           return t.set('board', 'shared', 'credentials', {apiKey : apiKeyInput.value, app: appInput.value, table: tableInput.value} )
+           return t.set('board', 'shared', 'credentials', { apiKey : apiKeyInput.value, app: appInput.value } )
             .then(function(){
               authDiv.style.display = "none"
               statusTextSpan.innerHTML="Your board is now connected to Airtable<br>Click on 'Authorize NodeJS' to connect Airtable to your board";
