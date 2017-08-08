@@ -1,10 +1,10 @@
 {
-  "name": "Trello AirTable Power-Up",
+  "name": "TrelloAirTablePowerUp",
   "version": "0.1.0",
   "description": "This [AirTable](https://airtable.com) [Trello](https://trello.com) Power-Up allows you to display custom fields from AirTable on Trello Cards",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
   "dependencies": {
     "compression": "1.6.2",
@@ -13,7 +13,8 @@
     "request": "^2.81.0",
     "body-parser": "^1.17.2",
     "airtable": "^0.5.0",
-    "ejs": "^2.5.6"
+    "ejs": "^2.5.6",
+    "bluebird": "^3.5.0"
   },
   "engines": {
     "node": "4.4.5"

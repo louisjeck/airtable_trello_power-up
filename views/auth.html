@@ -2,26 +2,19 @@
 <html>
 <head>
 <title>Authorize</title>
-  
-  
+
 <script src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script src="https://api.trello.com/1/client.js?key=910aeb0b23c2e63299f8fb460f9bda36"></script>
+<script src="https://api.trello.com/1/client.js?key=<%= APIKEY %>"></script>
 <script src="./js/auth.js"></script>
-<script>
-    var AIRTABLE_API_KEY = "<%= AIRTABLE_API_KEY %>" 
-    var AIRTABLE_BASE = "<%= AIRTABLE_BASE %>"
-    var TRELLO_MODEL = "<%= TRELLO_MODEL %>"
-</script>
+
 </head>
 <body>
 
-<h1>NodeJS Webhook</h1>
+<h1>Authentication</h1>
   
   <p id="p">
     
   </p>
-<a href="/settings.html">Click here to continue</a>
 
-<span id="status" style="display:none"></span>
 </body>
 </html>

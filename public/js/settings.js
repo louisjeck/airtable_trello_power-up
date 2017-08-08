@@ -16,7 +16,7 @@ t.render(function(){
   t.get('board', 'shared', 'credentials')
   .then(function(credentials){
     
-  return fetch(airtableAPI+credentials.app+"/"+credentials.table+"?maxRecords=1", { //fetch first row to guess table model
+  return fetch(airtableAPI+credentials.app+"/Cards?maxRecords=1", { //fetch first row to guess table model
       method: 'get', 
       headers: {
         'Authorization': 'Bearer '+credentials.apiKey, 

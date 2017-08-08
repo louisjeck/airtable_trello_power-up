@@ -9,6 +9,42 @@ var appInput = document.getElementById('app');
 var statusTextSpan = document.getElementById('statusText');
 var authNode = document.getElementById('authNode');
 var authDiv = document.getElementById('auth');
+const trelloAPI = "https://api.trello.com";
+const APIKey = "910aeb0b23c2e63299f8fb460f9bda36";
+
+function done(err, token){
+  if(err){
+    t.closePopup();
+    return;  
+  }
+  
+  t.set('board', 'private', 'token', {token : token});
+
+  Promise.all([
+    t.board('id').get('id'),
+    t.member('fullName', 'id'),
+    t.get('board', 'shared', 'credentials')
+  ])
+  .spread(function(boardId, member, credentials){
+    t.set('board', 'shared', 'auth', {
+         member : member,
+         boardId : boardId
+    });  
+
+        
+    createWebhook(token, boardId, credentials)
+      .then(() =>
+        t.popup({
+            title: 'Settings',
+            url: './settings.html',
+            height: 250, 
+        }))
+          
+  });
+  
+}
+
+
 
 t.render(function(){
   return Promise.all([
@@ -45,6 +81,83 @@ authNode.addEventListener('click', function(e) { //Node JS Auth popup (create We
 })
 
 
+function getMyWebhooks(token, model){
+  const params = encodeParams({
+    token : token,
+    key : APIKey,
+  })
+  
+  const url = window.location.hostname;
+  
+  return fetch(trelloAPI + "/1/tokens/" + token + "/webhooks?" + params)
+    .then(resp => resp.json())
+  
+    .then(webhooks => {
+
+      webhooks = webhooks.filter(webhook => {
+        return (webhook.idModel == model && webhook.callbackURL.substr(8, url.length) == url);
+      })
+      return webhooks
+    })  
+  
+
+
+}
+
+
+function cleanWebooks(token, model){
+  
+  return getMyWebhooks(token, model)
+    .then(webhooks => {
+        var p = [];
+        webhooks.forEach(webhook => p.push(deleteWebhook(token, webhook)));
+        return Promise.all(p)
+    })
+  
+}
+
+
+function deleteWebhook(token, webhook){
+  const params = encodeParams({
+    token : token,
+    key : APIKey,
+  });
+  
+  return fetch(trelloAPI+'/1/webhooks/' + webhook.id + '?' + params, {method : 'DELETE'})
+    .then(response => response.json());
+}
+
+
+function createWebhook(token, model, credentials){
+  return cleanWebooks(token, model).then(() => {
+    const params = encodeParams({
+      token : token,
+      key : APIKey,
+      idModel : model,
+      callbackURL : "https://" + window.location.hostname + "/webhooks"
+                              + "?airtable_base=" + credentials.app
+                              + "&airtable_api_key=" + credentials.apiKey
+                              + "&token=" + token
+
+    }) 
+    return fetch(trelloAPI+'/1/webhooks?'+params, {method : 'POST'}).then(response => response.json());
+  })
+}
+
+
+function encodeParams (params){
+  var esc = encodeURIComponent;
+  return Object.keys(params)
+      .map(k => esc(k) + '=' + esc(params[k]))
+      .join('&');
+}
+
+
+
+
+
+
+
 document.getElementById('save').addEventListener('click', function(){
   
     var airtableAPI = 'https://api.airtable.com/v0/'
@@ -77,6 +190,9 @@ document.getElementById('save').addEventListener('click', function(){
         case 200: //OK
            return t.set('board', 'shared', 'credentials', { apiKey : apiKeyInput.value, app: appInput.value } )
             .then(function(){
+             t.get('board', 'private', 'token').then(token => {
+               if(token !== undefined)
+                 return done(null, token.token)
               authDiv.style.display = "none"
               statusTextSpan.innerHTML="Your board is now connected to Airtable<br>Click on 'Authorize NodeJS' to connect Airtable to your board";
               authNode.style.display = 'block';
@@ -84,9 +200,10 @@ document.getElementById('save').addEventListener('click', function(){
               return t.board('id').get('id').then(function(model){
                 t.get('board', 'shared', 'credentials')
                   .then(function(credentials){
-                    authNode.href="https://hypnotic-bay.glitch.me/auth?airtable_api_key="+credentials.apiKey+"&airtable_base="+credentials.app+"&airtable_table="+credentials.table+"&trello_model="+model;
+                    authNode.href="https://hypnotic-bay.glitch.me/auth";
                 })
-            })
+              })
+             })
           .then(function(){
 
           })
